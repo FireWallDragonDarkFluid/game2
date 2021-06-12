@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+  <!-- Showcase -->
+  <section id="showcase">
+    <div class="container text-center">
+      <div class="home-search p-5">
+        <div class="overlay p-5">
+          <h1 class="display-4 mb-4">
+            找遊戲? 用 GAMEVAGO 就對了!
+          </h1>
+          <p class="lead">Gamevago 讓你即便宅在家不無聊，輕鬆找到最合適的遊戲!!!&nbsp;&nbsp;&nbsp;輸入關鍵字，Gamevago會篩選出合適的遊戲!!!</p>
+          <div class="search">
+            <form action="{% url 'search' %}">
+              <!-- Form Row 1 -->
+              <div class="form-row">
+                <div class="col-md-4 mb-3">
+                  <label class="sr-only">keywords</label>
+                  <input type="text" name="keywords" class="form-control" placeholder="快速搜尋 (ex: scroll, sci-fi)">
+                </div>
+
+                <div class="col-md-4 mb-3">
+                  <select name="type1" class="form-control">
+                    <option selected="true" disabled="disabled">類別 (全選)</option>
+                    {% for key,value in game_type.items %}
+                      <option value="{{key}}">{{value}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                  <label class="sr-only">type2</label>
+                  <select name="type2" class="form-control">
+                    <option selected="true" disabled="disabled">類別 (全選)</option>
+                    {% for key,value in game_type.items %}
+                      <option value="{{key}}">{{value}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <!-- Form Row 2 -->
+              <div class="form-row">
+                <div class="col-md-6 mb-3">
+                  <label class="sr-only">name</label>
+                  <input type='text' name="name" class="form-control" placeholder="遊戲名稱 (ex: Days gone)">
+                </div>
+                <div class="col-md-6 mb-3">
+                  <select name="price" class="form-control" id="type">
+                    <option selected="true" disabled="disabled">價格 (全選)</option>
+                    {% for key,value in game_price.items %}
+                      <option value="{{key}}">${{value}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <button class="btn btn-secondary btn-block mt-4" type="submit">確&nbsp;認&nbsp;送&nbsp;出</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Listings -->
+  <section id="listings" class="py-5">
+    <div class="container">
+      <h3 class="text-center mb-3">推薦遊戲</h3>
+      <div class="row">
+        {% if listings %}
+          {% for listing in listings %}
+            <!-- Listing 1 -->
+            <div class="col-md-6 col-lg-4 mb-4">
+              <div class="card listing-preview">
+                <img class="card-img-top" src="{{listing.img}}" alt="">
+                <div class="card-img-overlay">
+                  <h2>
+                    <span class="badge badge-secondary text-white">${{listing.price}}</span>
+                  </h2>
+                </div>
+                <div class="card-body">
+                  <div class="listing-heading text-center">
+                      <h4>{{listing.name}}</h4>
+                    {% if listing.name|length < 23 %}    
+                      <br>
+                    {% endif %}
+                  </div>
+                  <hr>
+                  <div class="row py-2 text-primary">
+                    <div class="col-12">
+                      <i class="fas fa-circle fa-sm"></i> 記憶體: &nbsp;{{listing.memory}}</div>
+                  </div>
+                  <div class="row py-2 text-primary">
+                    <div class="col-12">
+                      <i class="fas fa-circle fa-sm"></i> 作業系統:<br><p>{{listing.os}}</p></div>
+                  </div>
+                  <div class="row py-2 text-primary">
+                    <div class="col-12">
+                      <i class="fas fa-circle fa-sm"></i> 處理器:<br><p>{{listing.processor}}</p>
+                        {% if listing.processor|length < 44 %}
+                          <br>
+                        {% endif %}
+                    </div>
+                  </div>
+                  <div class="row py-2 text-primary">
+                    <div class="col-12">
+                      <i class="fas fa-circle fa-sm"></i> 顯卡:<br><p>{{listing.graphics}}</p>
+                      {% if listing.graphics|length < 44 %}
+                      <br>
+                      {% endif %}
+                      {% if listing.graphics|length < 88 %}
+                      <br>
+                      {% endif %}
+                    </div>
+                  </div>      
+                  <hr>
+                  <a href="{% url 'listing' listing.id %}" class="btn btn-primary btn-block">更多資訊</a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="col-md-12">
+            <p>No Listings Available</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+{% endblock %}
